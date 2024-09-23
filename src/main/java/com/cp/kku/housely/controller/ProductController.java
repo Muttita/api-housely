@@ -1,5 +1,7 @@
 package com.cp.kku.housely.controller;
 
+import com.cp.kku.housely.model.Category;
+import com.cp.kku.housely.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,14 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import com.cp.kku.housely.model.Product;
 import com.cp.kku.housely.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+    private final CategoryService categoryService;
+    private final ProductService productService;
 
-    @Autowired
-    private ProductService productService;
+    public ProductController(ProductService productService, CategoryService categoryService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping
     public List<Product> getAllProducts() {
@@ -40,6 +47,11 @@ public class ProductController {
 
     @PostMapping("/add")
     public Product createProduct(@RequestBody Product product) {
+        List<Category> categories = new ArrayList<>();
+        for (Category category : product.getCategories()) {
+            categories.add(categoryService.getCategoryById(category.getCategoryId()).orElseThrow());
+        }
+        product.setCategories(categories);
         return productService.createProduct(product);
     }
 

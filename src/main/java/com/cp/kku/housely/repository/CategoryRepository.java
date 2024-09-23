@@ -7,5 +7,4 @@ import com.cp.kku.housely.model.Category;
 
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
-    // Additional query methods can be defined here if needed
 }
