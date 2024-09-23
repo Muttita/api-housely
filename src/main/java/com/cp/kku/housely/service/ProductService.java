@@ -31,7 +31,6 @@ public class ProductService {
 
     public Optional<Product> updateProduct(Long id, Product productDetails) {
         return productRepository.findById(id).map(product -> {
-            product.setProductCode(productDetails.getProductCode());
             product.setBrandName(productDetails.getBrandName());
             product.setProductName(productDetails.getProductName());
             product.setPrice(productDetails.getPrice());
