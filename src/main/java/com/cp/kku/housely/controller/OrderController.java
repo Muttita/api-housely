@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
-    private final ProductService productService;
 
-    public OrderController(OrderService orderService, OrderItemService orderItemService, ProductService productService) {
+    public OrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
-        this.productService = productService;
     }
 
     @GetMapping
@@ -37,7 +35,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/{orderId}/items")
+    @GetMapping("/items/{orderId}")
     public ResponseEntity<?> getOrderItemsByOrderId(@PathVariable Long orderId) {
         try {
             CustomerOrder customerOrder = orderService.findById(orderId);
@@ -48,7 +46,7 @@ public class OrderController {
     }
 
 
-    @PostMapping("/items")
+    @PostMapping("/add/items")
     public ResponseEntity<?> createOrderItem( @RequestBody OrderItem orderItem) {
         try {
             CustomerOrder order = orderService.findById(orderItem.getOrderItemId().getOrderId());
@@ -65,7 +63,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.save(order), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{orderId}")
+    @PutMapping("/edit/{orderId}")
     public ResponseEntity<?> updateOrder(@PathVariable Long orderId, @RequestBody CustomerOrder order) {
         try {
             CustomerOrder oldOrder = orderService.findById(orderId);
@@ -76,7 +74,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/items/{orderId}/{productId}")
+    @PutMapping("/edit/items/{orderId}/{productId}")
     public ResponseEntity<?> updateOrderItem(@PathVariable Long orderId, @PathVariable Long productId, @RequestBody OrderItem orderItem) {
         try {
             CustomerOrder customerOrder = orderService.findById(orderId);
@@ -99,7 +97,7 @@ public class OrderController {
     }
 
 
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping("/delete/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable Long orderId) {
         try {
             orderService.findById(orderId);
@@ -110,17 +108,29 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping("/{orderId}/items/{orderItemId}")
-    public ResponseEntity<?> deleteOrderItem(@PathVariable Long orderId, @PathVariable OrderItemKey orderItemId) {
+    @DeleteMapping("/delete/items/{orderId}/{productId}")
+    public ResponseEntity<?> deleteOrderItem(@PathVariable Long orderId, @PathVariable Long productId) {
         try {
+            // ตรวจสอบว่ามี CustomerOrder ที่เกี่ยวข้องอยู่หรือไม่
             orderService.findById(orderId);
+
+            // สร้าง OrderItemKey จาก orderId และ productId
+            OrderItemKey orderItemId = new OrderItemKey();
+            orderItemId.setOrderId(orderId);
+            orderItemId.setProductId(productId);
+
+            // ตรวจสอบว่ามี OrderItem ที่ต้องการลบหรือไม่
             orderItemService.findById(orderItemId);
+
+            // ลบ OrderItem
             orderItemService.deleteById(orderItemId);
+
             return new ResponseEntity<>("OrderItem deleted successfully", HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
 
 
 

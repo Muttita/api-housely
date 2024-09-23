@@ -57,7 +57,6 @@ public class Product {
     private List<Room> rooms = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-//    @JsonIgnoreProperties("product")
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
