@@ -33,7 +33,7 @@ public class CategoryService {
         return categoryRepository.findById(id).map(category -> {
             category.setCategoryName(categoryDetails.getCategoryName());
             category.setDescription(categoryDetails.getDescription());
-            category.setImage(categoryDetails.getImage());
+            category.setImageBase64(categoryDetails.getImageBase64());
             category.setProductsInCategory(categoryDetails.getProductsInCategory());
             return categoryRepository.save(category);
         });

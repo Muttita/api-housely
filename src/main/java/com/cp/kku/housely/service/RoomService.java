@@ -33,7 +33,7 @@ public class RoomService {
         return roomRepository.findById(id).map(room -> {
             room.setRoomName(roomDetails.getRoomName());
             room.setDescription(roomDetails.getDescription());
-            room.setImage(roomDetails.getImage());
+            room.setImageBase64(roomDetails.getImageBase64());
             room.setProductsInRoom(roomDetails.getProductsInRoom());
             return roomRepository.save(room);
         });

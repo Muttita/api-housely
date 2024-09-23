@@ -33,8 +33,8 @@ public class Category {
     private String description;
 
     @Lob
-    @Column(name = "image")
-    private String image;
+    @Column(name = "imageBase64")
+    private String imageBase64;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     @JsonIgnore

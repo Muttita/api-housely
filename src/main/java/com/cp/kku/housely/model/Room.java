@@ -29,8 +29,8 @@ public class Room {
     private String description;
 
     @Lob
-    @Column(name = "image")
-    private String image;
+    @Column(name = "imageBase64")
+    private String imageBase64;
 
     @Column(name = "room_name", nullable = false)
     private String roomName;

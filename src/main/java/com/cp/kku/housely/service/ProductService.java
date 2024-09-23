@@ -35,7 +35,7 @@ public class ProductService {
             product.setProductName(productDetails.getProductName());
             product.setPrice(productDetails.getPrice());
             product.setQuantity(productDetails.getQuantity());
-            product.setImage(productDetails.getImage());
+            product.setImageBase64(productDetails.getImageBase64());
             product.setDescription(productDetails.getDescription());
             product.setCategories(productDetails.getCategories());
             product.setRooms(productDetails.getRooms());

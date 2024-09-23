@@ -40,8 +40,8 @@ public class Product {
     private int quantity;
 
     @Lob
-    @Column(name = "image")
-    private String image;
+    @Column(name = "imageBase64")
+    private String imageBase64;
 
     @Column(name = "description", length = 1000)
     private String description;
