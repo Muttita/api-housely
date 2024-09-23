@@ -27,6 +27,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "product_code", nullable = false)
+    private String productCode;
+
     @Column(name = "brand_name", nullable = false)
     private String brandName;
 
@@ -39,7 +42,6 @@ public class Product {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Lob
     @Column(name = "imageBase64")
     private String imageBase64;
 
