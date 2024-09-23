@@ -31,21 +31,21 @@ public class RoomController {
     }
 
     // POST: Create a new room
-    @PostMapping
+    @PostMapping("/add")
     public Room createRoom(@RequestBody Room room) {
         return roomService.createRoom(room);
     }
 
     // PUT: Update an existing room
-    @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        return roomService.updateRoom(id, roomDetails)
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room updateRoom) {
+        return roomService.updateRoom(id, updateRoom)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE: Delete a room by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         if (roomService.deleteRoom(id)) {
             return ResponseEntity.noContent().build();

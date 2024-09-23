@@ -31,21 +31,21 @@ public class CategoryController {
     }
 
     // POST: Create a new category
-    @PostMapping
+    @PostMapping("/add")
     public Category createCategory(@RequestBody Category category) {
         return categoryService.createCategory(category);
     }
 
     // PUT: Update an existing category
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category categoryDetails) {
-        return categoryService.updateCategory(id, categoryDetails)
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category updateCategory) {
+        return categoryService.updateCategory(id, updateCategory)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE: Delete a category by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         if (categoryService.deleteCategory(id)) {
             return ResponseEntity.noContent().build();
