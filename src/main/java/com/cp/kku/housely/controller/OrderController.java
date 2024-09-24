@@ -1,14 +1,21 @@
 package com.cp.kku.housely.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.cp.kku.housely.model.CustomerOrder;
 import com.cp.kku.housely.model.OrderItem;
 import com.cp.kku.housely.model.OrderItemKey;
 import com.cp.kku.housely.service.OrderItemService;
 import com.cp.kku.housely.service.OrderService;
-import com.cp.kku.housely.service.ProductService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -111,18 +118,15 @@ public class OrderController {
     @DeleteMapping("/delete/items/{orderId}/{productId}")
     public ResponseEntity<?> deleteOrderItem(@PathVariable Long orderId, @PathVariable Long productId) {
         try {
-            // ตรวจสอบว่ามี CustomerOrder ที่เกี่ยวข้องอยู่หรือไม่
+
             orderService.findById(orderId);
 
-            // สร้าง OrderItemKey จาก orderId และ productId
             OrderItemKey orderItemId = new OrderItemKey();
             orderItemId.setOrderId(orderId);
             orderItemId.setProductId(productId);
 
-            // ตรวจสอบว่ามี OrderItem ที่ต้องการลบหรือไม่
             orderItemService.findById(orderItemId);
 
-            // ลบ OrderItem
             orderItemService.deleteById(orderItemId);
 
             return new ResponseEntity<>("OrderItem deleted successfully", HttpStatus.OK);

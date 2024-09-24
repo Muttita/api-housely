@@ -21,13 +21,9 @@ public class CategoryService {
         return (List<Category>) categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryById(Long id) {
-        return categoryRepository.findById(id);
-    }
+    public Optional<Category> getCategoryById(Long id) { return categoryRepository.findById(id);}
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
-    }
+    public Category createCategory(Category category) { return categoryRepository.save(category); }
 
     public Optional<Category> updateCategory(Long id, Category categoryDetails) {
         return categoryRepository.findById(id).map(category -> {

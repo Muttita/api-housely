@@ -17,17 +17,11 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public List<Room> getAllRooms() {
-        return (List<Room>) roomRepository.findAll();
-    }
+    public List<Room> getAllRooms() { return (List<Room>) roomRepository.findAll();}
 
-    public Optional<Room> getRoomById(Long id) {
-        return roomRepository.findById(id);
-    }
+    public Optional<Room> getRoomById(Long id) { return roomRepository.findById(id);}
 
-    public Room createRoom(Room room) {
-        return roomRepository.save(room);
-    }
+    public Room createRoom(Room room) { return roomRepository.save(room); }
 
     public Optional<Room> updateRoom(Long id, Room roomDetails) {
         return roomRepository.findById(id).map(room -> {

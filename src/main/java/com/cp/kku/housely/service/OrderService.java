@@ -1,11 +1,11 @@
 package com.cp.kku.housely.service;
 
-import com.cp.kku.housely.model.CustomerOrder;
-import com.cp.kku.housely.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.cp.kku.housely.model.CustomerOrder;
+import com.cp.kku.housely.repository.OrderRepository;
 
 @Service
 public class OrderService {

@@ -1,13 +1,19 @@
 package com.cp.kku.housely.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cp.kku.housely.model.Room;
 import com.cp.kku.housely.service.RoomService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -19,13 +25,11 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    // GET: Get all rooms
     @GetMapping
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
 
-    // GET: Get a room by ID
     @GetMapping("/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
         return roomService.getRoomById(id)
@@ -33,13 +37,11 @@ public class RoomController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST: Create a new room
     @PostMapping("/add")
     public Room createRoom(@RequestBody Room room) {
         return roomService.createRoom(room);
     }
 
-    // PUT: Update an existing room
     @PutMapping("/update/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room updateRoom) {
         return roomService.updateRoom(id, updateRoom)
@@ -47,7 +49,6 @@ public class RoomController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE: Delete a room by ID
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         if (roomService.deleteRoom(id)) {
