@@ -1,6 +1,7 @@
 package com.cp.kku.housely.service;
 
 import com.cp.kku.housely.model.CustomerOrder;
+import com.cp.kku.housely.model.OrderItem;
 import com.cp.kku.housely.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,14 @@ public class OrderService {
     public void deleteById(Long id) {
         orderRepository.deleteById(id);
     }
+
+    public List<CustomerOrder> findCustomerOrdersByCustomerId(Long customerId) {
+        return orderRepository.findCustomerOrdersByCustomerId(customerId);
+    }
+
+    public CustomerOrder findOrderByCustomerAndOrderId (Long customerId, Long orderId) {
+        return orderRepository.findCustomerOrderByCustomerAndOrderId(customerId, orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+
 }

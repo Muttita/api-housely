@@ -27,4 +27,9 @@ public class CustomerOrder {
     @JsonIgnoreProperties("customerOrder")
     @OneToMany(mappedBy = "customerOrder",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+//    @JsonIgnoreProperties("customerOrders")
+    private User user = new User();
 }
