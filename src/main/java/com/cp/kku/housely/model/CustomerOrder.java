@@ -31,5 +31,5 @@ public class CustomerOrder {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
 //    @JsonIgnoreProperties("customerOrders")
-    private User user;
+    private Users user;
 }

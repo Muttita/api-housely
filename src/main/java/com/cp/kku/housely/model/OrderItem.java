@@ -7,7 +7,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "order_item")
-@JsonIgnoreProperties("customerOrder")
+//@JsonIgnoreProperties("customerOrder")
 public class OrderItem {
     @EmbeddedId
     private OrderItemKey orderItemId;

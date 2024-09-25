@@ -1,6 +1,6 @@
 package com.cp.kku.housely.controller;
 
-import com.cp.kku.housely.model.User;
+import com.cp.kku.housely.model.Users;
 import com.cp.kku.housely.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,17 +32,17 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addUser(@RequestBody User user) {
-        userService.save(user);
+    public ResponseEntity<?> addUser(@RequestBody Users users) {
+        userService.save(users);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{userId}")
-    public ResponseEntity<?> editUser(@PathVariable Long userId, @RequestBody User user){
+    public ResponseEntity<?> editUser(@PathVariable Long userId, @RequestBody Users users){
         try{
             userService.findById(userId);
-            user.setId(userId);
-            return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+            users.setId(userId);
+            return new ResponseEntity<>(userService.save(users), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
