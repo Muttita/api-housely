@@ -1,57 +1,50 @@
 package com.cp.kku.housely.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.cp.kku.housely.model.CustomerOrder;
 import com.cp.kku.housely.model.OrderItem;
 import com.cp.kku.housely.model.OrderItemKey;
-import com.cp.kku.housely.model.User;
 import com.cp.kku.housely.service.OrderItemService;
 import com.cp.kku.housely.service.OrderService;
-import com.cp.kku.housely.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/user/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
-    private final UserService userService;
 
-    public OrderController(OrderService orderService, OrderItemService orderItemService, UserService userService) {
+    public OrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
-        this.userService = userService;
-    }
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getAllOrders(@PathVariable Long userId) {
-        try{
-            userService.findById(userId);
-            List<CustomerOrder> customerOrders = orderService.findCustomerOrdersByCustomerId(userId);
-            return new ResponseEntity<>(customerOrders, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 
-    @GetMapping("/{userId}/{orderId}")
-    public ResponseEntity<?> getOrderById(@PathVariable Long userId, @PathVariable Long orderId) {
-        try{
-            userService.findById(userId);
-            return new ResponseEntity<>(
-                    orderService.findOrderByCustomerAndOrderId(userId, orderId),
-                    HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @GetMapping
+    public ResponseEntity<?> getAllOrders() {
+        return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/items/{userId}/{orderId}")
-    public ResponseEntity<?> getItemsByOrderId(@PathVariable Long userId,@PathVariable Long orderId) {
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> getOrderById(@PathVariable Long orderId) {
         try {
-            userService.findById(userId);
+            return new ResponseEntity<>(orderService.findById(orderId), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/items/{orderId}")
+    public ResponseEntity<?> getOrderItemsByOrderId(@PathVariable Long orderId) {
+        try {
             CustomerOrder customerOrder = orderService.findById(orderId);
             return new ResponseEntity<>(customerOrder.getOrderItems(), HttpStatus.OK);
         }catch (Exception e) {
@@ -59,37 +52,23 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/items/add")
-    public ResponseEntity<?> createOrderItem(@RequestBody OrderItem orderItem) {
+
+    @PostMapping("/add/items")
+    public ResponseEntity<?> createOrderItem( @RequestBody OrderItem orderItem) {
         try {
-            User user = userService.findById(orderItem.getCustomerOrder().getUser().getId());
             CustomerOrder order = orderService.findById(orderItem.getOrderItemId().getOrderId());
-            user.getCustomerOrders().add(order);
-            order.setUser(user);
             OrderItem newOrderItem = orderItemService.save(orderItem);
             order.getOrderItems().add(newOrderItem);
-            orderService.save(order);
-            userService.save(user);
             return new ResponseEntity<>(newOrderItem, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
-        try {
-            User user = userService.findById(order.getUser().getId());
-            order.setUser(user);
-            CustomerOrder newOrder = orderService.save(order);
-            user.getCustomerOrders().add(newOrder);
-            userService.save(user);
-            return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(orderService.save(order), HttpStatus.CREATED);
     }
-
 
     @PutMapping("/edit/{orderId}")
     public ResponseEntity<?> updateOrder(@PathVariable Long orderId, @RequestBody CustomerOrder order) {
@@ -139,18 +118,15 @@ public class OrderController {
     @DeleteMapping("/delete/items/{orderId}/{productId}")
     public ResponseEntity<?> deleteOrderItem(@PathVariable Long orderId, @PathVariable Long productId) {
         try {
-            // ตรวจสอบว่ามี CustomerOrder ที่เกี่ยวข้องอยู่หรือไม่
+
             orderService.findById(orderId);
 
-            // สร้าง OrderItemKey จาก orderId และ productId
             OrderItemKey orderItemId = new OrderItemKey();
             orderItemId.setOrderId(orderId);
             orderItemId.setProductId(productId);
 
-            // ตรวจสอบว่ามี OrderItem ที่ต้องการลบหรือไม่
             orderItemService.findById(orderItemId);
 
-            // ลบ OrderItem
             orderItemService.deleteById(orderItemId);
 
             return new ResponseEntity<>("OrderItem deleted successfully", HttpStatus.OK);
@@ -158,5 +134,8 @@ public class OrderController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+
+
 
 }
